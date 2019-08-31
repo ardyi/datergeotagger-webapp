@@ -24,7 +24,7 @@
             </form>
           </div>
           <div class="input-group-append">
-            <button type="button" class="btn btn-primary" id="btnUpload">Upload</button>
+            <button type="button" class="btn btn-primary" id="btn-upload">Upload</button>
           </div>
         </div>
       </div>
@@ -32,22 +32,23 @@
   </div>
   <br>
   <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#home">All Orders</a>
+    <li class="nav-item active">
+      <a class="nav-link" data-toggle="tab" href="#allorder" id="all-order">All Orders</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#profile">To-Do Orders</a>
+      <a class="nav-link" data-toggle="tab" href="#todoorder" id="todo-order">To-Do Orders</a>
     </li>
   </ul>
-  <br>
   <div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade active show" id="home">
+    <div class="tab-pane fade active show" id="allorder">
       <div id="table-all-orders">
-        @include('Admin.tables.all_orders')
+        @include('Admin.tables.table_all_orders')
       </div>
     </div>
-    <div class="tab-pane fade show" id="profile">
-      <div id="table-todo-orders"></div>
+    <div class="tab-pane fade show" id="todoorder">
+      <div id="table-todo-orders">
+        @include('Admin.tables.table_todo_orders')
+      </div>
     </div>
   </div>
 </div>

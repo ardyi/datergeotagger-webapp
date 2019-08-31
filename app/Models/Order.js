@@ -8,7 +8,9 @@ const moment = use('moment')
 class Order extends Model {
 
   static async storeOrder(cell){
-    console.log(moment(cell['Due']).format('YYYY-MM-DD HH:mm:ss'))
+    if(await this.query().where('orderNumber', cell['Order Number']).fetch()){
+      return false
+    }
     const trx = await Database.beginTransaction()
         try {
             await this
@@ -21,6 +23,7 @@ class Order extends Model {
               state: cell['State'],
               zipCode: cell['Zip'],
               clientType: cell['Client'],
+              orderStatus: 2,
               // createBy: 1,
             }, trx)
           await trx.commit()

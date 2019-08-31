@@ -1,0 +1,43 @@
+@include('layouts/pagination')
+<table class="table table-hover">
+  <thead>
+    <tr class="table-primary">
+      <th scope="col">Order Number</th>
+      <th scope="col">Due</th>
+      <th scope="col">Work Ordered</th>
+      <th scope="col">Address</th>
+      <th scope="col">City</th>
+      <th scope="col">State</th>
+      <th scope="col">Zip</th>
+      <th scope="col">Client Type</th>
+      <th scope="col">Option</th>
+    </tr>
+  </thead>
+  <tbody>
+    @each(order in result.data)
+    <tr class="table-secondary" style="font-weight: 300;">
+      <th scope="row">{{order.orderNumber}}</th>
+      <td>{{order.dueDate.toLocaleDateString()}}</td>
+      <td>{{order.workOrdered}}</td>
+      <td>{{order.address}}</td>
+      <td>{{order.city}}</td>
+      <td>{{order.state}}</td>
+      <td>{{order.zipCode}}</td>
+      <td>{{order.clientType}}</td>
+      <td>
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+              <button type="button" class="btn btn-primary">Add to</button>
+              <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                  <a class="dropdown-item" href="#">To Do</a>
+                  <a class="dropdown-item" href="#">Pending</a>
+                  <a class="dropdown-item" href="#">Closed</a>
+                </div>
+              </div>
+            </div>
+      </td>
+    </tr>
+    @endeach
+  </tbody>
+</table>
