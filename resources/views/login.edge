@@ -1,0 +1,18 @@
+@layout('layouts/login')
+
+@section('javascripts')
+{{script('javascripts/login.js')}}
+@endsection
+
+@section('content')
+
+<div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+  <div class="card-header">Log-in</div>
+  <div class="card-body">
+    <div class="d-flex justify-content-center">
+      <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    </div>
+  </div>
+</div>
+
+@endsection
