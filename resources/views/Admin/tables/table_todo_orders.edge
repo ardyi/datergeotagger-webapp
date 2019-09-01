@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     @each(order in result.data)
-    <tr class="table-secondary">
+    <tr class="table-secondary"  style="font-weight: 300;">
       <th scope="row">{{order.orderNumber}}</th>
       <td>{{order.dueDate.toLocaleDateString()}}</td>
       <td>{{order.workOrdered}}</td>

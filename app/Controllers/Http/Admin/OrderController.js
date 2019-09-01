@@ -72,6 +72,8 @@ class OrderController {
   }) {
     const orders = await Order
       .query()
+      .where('orderStatus', 2)
+      .SearchOrder(request.input('search'))
       .paginate(request.input('page'), 10)
     return view
       .render('Admin.tables.table_all_orders', {
@@ -87,11 +89,32 @@ class OrderController {
     const toDoOrders = await Order
       .query()
       .where('orderStatus', 3)
+      .orderBy('updated_at', 'desc')
       .paginate(request.input('page'), 10)
     return view
       .render('Admin.tables.table_todo_orders', {
         result: toDoOrders.toJSON(),
       })
+  }
+
+  async fetchClosedOrders({
+    request,
+    view,
+    response
+  }) {
+    const toDoOrders = await Order
+      .query()
+      .where('orderStatus', 3)
+      .orderBy('updated_at', 'desc')
+      .paginate(request.input('page'), 10)
+    return view
+      .render('Admin.tables.table_todo_orders', {
+        result: toDoOrders.toJSON(),
+      })
+  }
+
+  async orderStatusUpdate({ request, view, response }){
+    return await Order.assignTodo(request)
   }
 }
 

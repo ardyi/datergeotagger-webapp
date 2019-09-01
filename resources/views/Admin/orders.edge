@@ -14,7 +14,7 @@
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-8">
-        <input class="form-control" type="text" placeholder="Search">
+        <input class="form-control" type="text" placeholder="Search" id="searchString">
       </div>
       <div class="col-md-4">
         <div class="row">
@@ -32,11 +32,14 @@
   </div>
   <br>
   <ul class="nav nav-tabs">
-    <li class="nav-item active">
-      <a class="nav-link" data-toggle="tab" href="#allorder" id="all-order">All Orders</a>
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#allorder" id="all-order">All Orders</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" data-toggle="tab" href="#todoorder" id="todo-order">To-Do Orders</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#closedorder" id="closed-order">Closed Orders</a>
     </li>
   </ul>
   <div id="myTabContent" class="tab-content">
@@ -48,6 +51,11 @@
     <div class="tab-pane fade show" id="todoorder">
       <div id="table-todo-orders">
         @include('Admin.tables.table_todo_orders')
+      </div>
+    </div>
+    <div class="tab-pane fade show" id="closedorder">
+      <div id="table-closed-orders">
+        @include('Admin.tables.table_closed_orders')
       </div>
     </div>
   </div>
