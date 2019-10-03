@@ -27,14 +27,25 @@ $(() => {
   })
 })
 
-function updateStatus(status, id){
-  ajaxRequest(`${URL}/orderStatusUpdate`, {
+
+function showUpdateModal(order_id){
+  $('#update_orderId').val(order_id);
+  $('#update_modal').modal('toggle');
+}
+
+function updateOrder(){
+  var id = $('#update_orderId').val();
+  var status = $('#update_orderStatus').val();
+  var notes = $('#orderNotes').val();
+  ajaxRequest(`${URL}/orderUpdate`, {
     status: status,
     id: id,
+    notes: notes,
   })
   .then(res => {
     fetchOrders(currentPage);
-    console.log(res)
+    $('#update_modal').modal('toggle');
+      console.log(res)
   })
 }
 

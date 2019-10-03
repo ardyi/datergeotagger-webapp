@@ -10,11 +10,12 @@
       <th scope="col">State</th>
       <th scope="col">Zip</th>
       <th scope="col">Client Type</th>
+      <th scope="col">Option</th>
     </tr>
   </thead>
   <tbody>
     @each(order in result.data)
-    <tr class="table-secondary"  style="font-weight: 300;">
+    <tr class="table-secondary" style="font-weight: 300;">
       <th scope="row">{{order.orderNumber}}</th>
       <td>{{order.dueDate.toLocaleDateString()}}</td>
       <td>{{order.workOrdered}}</td>
@@ -23,7 +24,11 @@
       <td>{{order.state}}</td>
       <td>{{order.zipCode}}</td>
       <td>{{order.clientType}}</td>
+      <td>
+        <button type="button" class="btn btn-outline-primary" onclick="showUpdateModal({{order.id}})">Update</button>
+      </td>
     </tr>
+    <input type="hidden" name="enc-id">
     @endeach
   </tbody>
 </table>

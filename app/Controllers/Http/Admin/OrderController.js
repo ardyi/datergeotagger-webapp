@@ -4,6 +4,8 @@ const fs = use('fs')
 const moment = use('moment')
 
 const Order = use('App/Models/Order')
+const OrderStatus = use('App/Models/OrderStatus')
+const OrderNote = use('App/Models/OrderNote')
 
 class OrderController {
   async index({
@@ -16,8 +18,12 @@ class OrderController {
   async orders({
     view
   }) {
+    const orderStatuses = await OrderStatus.query().fetch()
+    console.log(orderStatuses.toJSON())
     return view
-      .render('Admin.orders', {})
+      .render('Admin.orders', {
+        orderStatuses: orderStatuses.toJSON()
+      })
   }
 
   async uploadFile({
@@ -104,17 +110,19 @@ class OrderController {
   }) {
     const toDoOrders = await Order
       .query()
-      .where('orderStatus', 3)
+      .where('orderStatus', 4)
       .orderBy('updated_at', 'desc')
       .paginate(request.input('page'), 10)
     return view
-      .render('Admin.tables.table_todo_orders', {
+      .render('Admin.tables.table_closed_orders', {
         result: toDoOrders.toJSON(),
       })
   }
 
-  async orderStatusUpdate({ request, view, response }){
-    return await Order.assignTodo(request)
+  async orderUpdate({ request, view, response }){
+    const id = await Order.updateOrder(request)
+    return id ? await OrderNote.storeNote(request) : false
+    // return 
   }
 }
 

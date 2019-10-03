@@ -37,14 +37,15 @@ class Order extends Model {
         }
   }
 
-  static async assignTodo(request){
+  static async updateOrder(request){
     const trx = await Database.beginTransaction()
       try {
+        const order =
         await this
           .query()
           .where('id', request.body.id)
           .update({
-            orderStatus: 3
+            orderStatus: request.body.status
           }, trx)
         await trx.commit()
         return true
