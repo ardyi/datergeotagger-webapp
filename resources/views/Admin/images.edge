@@ -1,0 +1,78 @@
+@layout('layouts/main')
+
+@section('javascripts')
+{{script('javascripts/global.js')}}
+{{script('javascripts/admin/images/index.js')}}
+@endsection
+
+@section('breadcrumbs')
+@endsection
+
+@section('content')
+
+<div class="container">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-4">
+        <label for="folderPath">Dater Folder Location</label>
+        <input class="form-control" type="text" placeholder="Folder Path" id="folderPath" value="/home/ardyi/Desktop/Dater/">
+      </div>
+      <div class="col-md-6">
+        <label for="daterDate">Dater Date (MM/DD/YYYY)</label>
+        <div class="row">
+          <div class="col-md-2">
+            <input class="form-control" type="text" placeholder="MM" id="daterMonth">
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" type="text" placeholder="DD" id="daterDay">
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" type="text" placeholder="YYYY" id="daterYear">
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="col-md-4">
+      <div class="row">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary" id="btn-dater">Date Photos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="folderPath">Geotagger Location</label>
+        <input class="form-control" type="text" placeholder="Property Address" id="geotaggerLocatoin">
+      </div>
+      <div class="col-md-6">
+        <label for="folderPath">Geotagger Date and Time</label>
+        <div class="row">
+          <div class="col-md-2">
+            <input class="form-control" type="text" placeholder="Hour" id="geotaggerHour">
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" type="text" placeholder="Min" id="geotaggerMinute">
+          </div>
+          <div class="col-md-2">
+            <input class="form-control" type="text" placeholder="Sec" id="geotaggerSecond">
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="col-md-4">
+      <div class="row">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary" id="btn-geotagger">Geotag Photos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@include('Admin.modals.modal_update_order')
+@endsection
