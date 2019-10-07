@@ -30,6 +30,8 @@
     "fs-extra": "^8.1.0",
     "gm": "^1.23.1",
     "mysql": "^2.17.1",
+    "natural-orderby": "^2.0.3",
+    "sync": "^0.2.5",
     "xlsx": "^0.15.1"
   },
   "devDependencies": {},

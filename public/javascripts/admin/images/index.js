@@ -20,6 +20,7 @@ $(document).on('blur', '#geotaggerLocatoin', () => {
 })
 
 function datePhotos(){
+  showOverlay()
   var folder = folderPath;
   var daterDate = $('#daterMonth').val() + '/' + $('#daterDay').val() + '/' + $('#daterYear').val();
   ajaxRequest(`${URL}/datePhotos`, {

@@ -1,14 +1,38 @@
 const APP_URL = 'http://localhost:3000'
 
+// function ajaxRequest(url, data) {
+//   return $.ajax({
+//     headers: {
+//       'X-CSRF-Token': $('meta[name="csrf_token"]').attr('content')
+//     },
+//     url: url,
+//     method: 'POST',
+//     data: data
+//   })
+// }
+
 function ajaxRequest(url, data) {
-  return $.ajax({
+  // if (ajaxisRunning) {
+  //   return;
+  // }
+
+  // ajaxisRunning = true;
+  var res = $.ajax({
+    type: 'POST',
+    url: url,
     headers: {
       'X-CSRF-Token': $('meta[name="csrf_token"]').attr('content')
     },
-    url: url,
-    method: 'POST',
-    data: data
-  })
+    data: data,
+    success: function() {
+      ajaxisRunning = false;
+    },
+    error: function() {
+      ajaxisRunning = false;
+    }
+  });
+
+  return res;
 }
 
 function ajaxRequestForm(url, form) {
@@ -41,4 +65,12 @@ function clearHtmlElement(keyword) {
 
 function hideModal(modalId) {
   $(`#${modalId}`).modal('hide')
+}
+
+function showOverlay(){
+  $('#overlay').attr('class', 'loading')
+}
+
+function hideOverlay(){
+  $('#overlay').attr('class', '')
 }
