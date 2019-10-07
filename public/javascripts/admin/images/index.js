@@ -43,6 +43,7 @@ function geotagPhotos(){
   // console.log(daterDate);
   var res = ajaxRequest(`${URL}/geotagPhotos`, {
     folderDirectory: folder,
+    propertyLocation: propertyLocation
     // date: daterDate
   })
   res.done((res) => {

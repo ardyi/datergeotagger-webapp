@@ -155,52 +155,19 @@ class ImageController {
 
   async geotagPhotos({ request }){
     // let counter = 0
-    googleMapsClient.geocode({address: '1600 Amphitheatre Parkway, Mountain View, CA'})
+    googleMapsClient.geocode({address: request.input('propertyLocation')})
     .asPromise()
     .then((response) => {
       console.log((response.json.results[0]).geometry);
     })
     .catch((err) => {
-      console.log(err);
-    });
-
-    // promises = durations.map((duration) => {
-    //   return timeOut(duration).catch(e => e) // Handling the error for each promise.
-    // })
-    
-    // Promise.all(promises)
-    //   .then(response => console.log(response)) // ["Completed in 1000", "Rejected in 2000", "Completed in 3000"]
-    //   .catch(error => console.log(`Error in executing ${error}`))
-    // view raw
-
-    // A simple promise that resolves after a given time
-    const geotag = (t) => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(`Completed in ${t}`)
-        }, 500)
-      })
-    }
-    
-    var files = fs.readdirSync('/home/ardyi/Desktop/Dater/')
-    files = natOrder.orderBy(files)
-
-    const promises = []
-
-    files.map((file) => {
-      // In the below line, two things happen.
-      // 1. We are calling the async function (timeout()). So at this point the async function has started and enters the 'pending' state.
-      // 2. We are pushing the pending promise to an array.
-      promises.push(geotag(file)) 
+      return {
+        err
+      }
     })
 
-    console.log(promises) // [ Promise { "pending" }, Promise { "pending" }, Promise { "pending" } ]
-
-    // We are passing an array of pending promises to Promise.all
-    // Promise.all will wait till all the promises get resolves and then the same gets resolved.
-    return Promise.all(promises)
-    .then(response => console.log(response)) // ["Completed in 1000", "Completed in 2000", "Completed in 3000"
-
+    var files = fs.readdirSync('/home/ardyi/Desktop/Dater/')
+    files = natOrder.orderBy(files)
   }
 }
 
@@ -240,3 +207,42 @@ module.exports = ImageController
 //   .then(a => console.log(counter))
 
 // // return files
+
+
+
+    // promises = durations.map((duration) => {
+    //   return timeOut(duration).catch(e => e) // Handling the error for each promise.
+    // })
+    
+    // Promise.all(promises)
+    //   .then(response => console.log(response)) // ["Completed in 1000", "Rejected in 2000", "Completed in 3000"]
+    //   .catch(error => console.log(`Error in executing ${error}`))
+    // view raw
+
+    // // A simple promise that resolves after a given time
+    // const geotag = (t) => {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve(`Completed in ${t}`)
+    //     }, 500)
+    //   })
+    // }
+    
+    // var files = fs.readdirSync('/home/ardyi/Desktop/Dater/')
+    // files = natOrder.orderBy(files)
+
+    // const promises = []
+
+    // files.map((file) => {
+    //   // In the below line, two things happen.
+    //   // 1. We are calling the async function (timeout()). So at this point the async function has started and enters the 'pending' state.
+    //   // 2. We are pushing the pending promise to an array.
+    //   promises.push(geotag(file)) 
+    // })
+
+    // console.log(promises) // [ Promise { "pending" }, Promise { "pending" }, Promise { "pending" } ]
+
+    // // We are passing an array of pending promises to Promise.all
+    // // Promise.all will wait till all the promises get resolves and then the same gets resolved.
+    // return Promise.all(promises)
+    // .then(response => console.log(response)) // ["Completed in 1000", "Completed in 2000", "Completed in 3000"
