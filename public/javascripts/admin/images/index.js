@@ -23,30 +23,38 @@ function datePhotos(){
   showOverlay();
   var folder = folderPath;
   var daterDate = $('#daterMonth').val() + '/' + $('#daterDay').val() + '/' + $('#daterYear').val();
-  ajaxRequest(`${URL}/datePhotos`, {
+  var res = ajaxRequest(`${URL}/datePhotos`, {
     folderDirectory: folder,
     date: daterDate
   })
-  .then(res => {
-    setTimeout(function(){ hideOverlay(); }, 2000);
-    console.log(res)
-    if(res.err == 0){
-      
-    }
+  res.done((res) => {
+    console.log(res.length)
+
+    console.log(res != null ? 'Dated photos!' : 'no photos')
+    hideOverlay();
   })
+  // .then(res => {
+  //   // setTimeout(function(){ hideOverlay(); }, 2000);
+  //   console.log(res)
+  //   // if(res.err == 0){
+      
+  //   // }
+  // })
 }
 
 function geotagPhotos(){
+  showOverlay();
   var folder = folderPath;
-  // var daterDate = $('#daterMonth').val() + '/' + $('#daterDay').val() + '/' + $('#daterYear').val();
+  var daterDate = $('#daterMonth').val() + '/' + $('#daterDay').val() + '/' + $('#daterYear').val();
   // var time = $('#geotaggerHour').val() + ':' + $('#geotaggerMinute').val() + ':' + $('#geotaggerSecond').val();
   // console.log(daterDate);
   var res = ajaxRequest(`${URL}/geotagPhotos`, {
     folderDirectory: folder,
-    propertyLocation: propertyLocation
-    // date: daterDate
+    propertyLocation: propertyLocation,
+    date: daterDate,
   })
   res.done((res) => {
+    hideOverlay();
     console.log(res)
   })
 }
