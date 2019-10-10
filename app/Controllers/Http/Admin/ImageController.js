@@ -114,8 +114,19 @@ class ImageController {
     locLatitude = googleLocation.location.lat
     locLongitude = googleLocation.location.lng
 
+    rLatitude = piexif.GPSHelper.degToDmsRational(locLatitude)
+    rLongitude = piexif.GPSHelper.degToDmsRational(locLongitude)
     latitudeRef = locLatitude >= 0 ? 'N' : 'S'
     longitudeRef = locLongitude >= 0 ? 'E' : 'W'
+
+    var exif = {}
+    var gps = {}
+
+    gps[piexif.GPSIFD.GPSLatitudeRef] = latitudeRef
+    gps[piexif.GPSIFD.GPSLatitude] = rLatitude
+    gps[piexif.GPSIFD.GPSLongitudeRef] = longitudeRef
+    gps[piexif.GPSIFD.GPSLongitude] = rLongitude
+    exif[piexif.ExifIFD.DateTimeOriginal] = "2010:10:10 10:10:10"
 
     var files = fs.readdirSync(folderDirectory)
     files = natOrder.orderBy(files)
@@ -126,7 +137,7 @@ class ImageController {
       var data = jpeg.toString("binary")
       var exifObj = piexif.load(data)
 
-      console.log(exifObj)
+      // console.log(exifObj)
       }
     }))
 
