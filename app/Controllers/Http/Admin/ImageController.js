@@ -59,7 +59,8 @@ class ImageController {
     let size
 
     return Promise.all(files.map(async(file) => {
-      if(path.extname(file) == '.jpg' || path.extname(file) == '.jpeg'){
+      if((path.extname(file)).toLowerCase() == '.jpg' || path.extname(file) == '.jpeg'){
+        console.log(file)
         fs.copyFileSync(folderDirectory + file, folderDirectory + '/__backup/' + file)
         // fs.copyFile(folderDirectory + file, folderDirectory + '/__backup/' + file, (err) => {
         //   if (err) console.log(err)
@@ -75,14 +76,14 @@ class ImageController {
           console.log(folderDirectory + fileName + '(' + counter + ').jpg')
           gm(folderDirectory + file)
           .resize(size)
-          .stroke("#ffffff")
+          // .stroke("#ffffff")
           .fill('#ff0')
           .font("/usr/share/fonts/droid/DroidSans-Bold.ttf", 16)
           .drawText(10, 13, daterDate, 'Southwest')
           .write(folderDirectory + fileName + '(' + counter + ').jpg', function (err) {
             fs.unlinkSync(folderDirectory + file)
             if (!err) fs.unlink(folderDirectory + file, (err) => {
-              resolve('deleted ' + file)
+              // resolve('deleted ' + file)
               if(!err) console.log('deleted ' + file)
             })
             if (err) console.log(err)
@@ -93,27 +94,46 @@ class ImageController {
   }
 
   async geotagPhotos({ request }){
-    // let counter = 0
-    let folderDirectory = request.input('folderDirectory')
+    // let folderDirectory = re
+    // let counter = 0quest.input('folderDirectory')
+
+    const { folderDirectory, propertyLocation, geoDate, geoTime } = request.post()
+
+    
+    let googleLocation = await this.getGoogleLoc(propertyLocation)
+
+    let exifByteResult = await this.getExifBytes(googleLocation, geoDate, geoTime)
+
+    var files = fs.readdirSync(folderDirectory)
+    files = natOrder.orderBy(files)
+    // return files
+
+    for(let file of files){
+      // console.log(exifByteResult)
+      if(path.extname(file) == '.jpg' || path.extname(file) == '.jpeg'){
+      var jpeg = fs.readFileSync(folderDirectory + file)
+      var data = jpeg.toString('binary')
+      // console.log(data)
+      var newData = piexif.insert(exifByteResult, data)
+      // console.log(newData)
+      var newJpeg =  new Buffer.from(newData, 'binary')
+      // console.log('saving' + file + 'test' )
+      fs.writeFileSync(folderDirectory + file, newJpeg)
+      }
+    }
+    return 'Done Metadata insert'
+  }
+
+  async getExifBytes(googleLocation, geoDate, geoTime){
     let locLatitude
     let locLongitude
     let latitudeRef
     let longitudeRef
+    let rLatitude
+    let rLongitude
 
-    let googleLocation = await googleMapsClient.geocode({address: request.input('propertyLocation')})
-    .asPromise()
-    .then((response) => {
-      return (response.json.results[0]).geometry
-    })
-    .catch((err) => {
-      return {
-        err
-      }
-    })
-
-    locLatitude = googleLocation.location.lat
-    locLongitude = googleLocation.location.lng
-
+    locLatitude = googleLocation.geometry.location.lat
+    locLongitude = googleLocation.geometry.location.lng
     rLatitude = piexif.GPSHelper.degToDmsRational(locLatitude)
     rLongitude = piexif.GPSHelper.degToDmsRational(locLongitude)
     latitudeRef = locLatitude >= 0 ? 'N' : 'S'
@@ -121,44 +141,42 @@ class ImageController {
 
     var exif = {}
     var gps = {}
+    var zeroth = {}
 
-    gps[piexif.GPSIFD.GPSLatitudeRef] = latitudeRef
+    // zeroth[piexif.ImageIFD.Make] = "Make"
+    // zeroth[piexif.ImageIFD.XResolution] = [640, 1];
+    // zeroth[piexif.ImageIFD.YResolution] = [480, 1];
+    // zeroth[piexif.ImageIFD.Software] = "Piexifjs"
     gps[piexif.GPSIFD.GPSLatitude] = rLatitude
-    gps[piexif.GPSIFD.GPSLongitudeRef] = longitudeRef
     gps[piexif.GPSIFD.GPSLongitude] = rLongitude
-    exif[piexif.ExifIFD.DateTimeOriginal] = "2010:10:10 10:10:10"
+    gps[piexif.GPSIFD.GPSLatitudeRef] = latitudeRef
+    gps[piexif.GPSIFD.GPSLongitudeRef] = longitudeRef
+    // gps[piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7]
+    // gps[piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99"
+    exif[piexif.ExifIFD.DateTimeOriginal] = `${geoDate} ${geoTime}+00:00`
+    var exifObj = {"Exif":exif, "GPS":gps};
+    // var exifbytes = piexif.dump(exifObj)
+    // return piexif.load(exifObj)
+    // console.log(piexif.load(exifObj))
+    return piexif.dump(exifObj)
+  }
 
-    var files = fs.readdirSync(folderDirectory)
-    files = natOrder.orderBy(files)
+  async getGoogleLoc(location){
+    return await googleMapsClient.geocode({address: location})
+    .asPromise()
+    .then((response) => {
+      // return (response.json.results[0]).geometry
+      // console.log((response.json.results[0]).geometry.location)
 
-    return Promise.all(files.map(async(file) => {
-      if(path.extname(file) == '.jpg' || path.extname(file) == '.jpeg'){
-      var jpeg = fs.readFileSync(folderDirectory + file)
-      var data = jpeg.toString("binary")
-      var exifObj = piexif.load(data)
-
-      // console.log(exifObj)
+      return response.json.results[0]
+      locLatitude = (response.json.results[0]).geometry.location.lat
+      locLongitude = (response.json.results[0]).geometry.location.lng
+    })
+    .catch((err) => {
+      return {
+        err
       }
-    }))
-
-    var jpeg = fs.readFileSync(filename1);
-    var data = jpeg.toString("binary");
-    var exifObj = piexif.load(data);
-    exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
-    exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
-    var exifbytes = piexif.dump(exifObj);
-    var newData = piexif.insert(exifbytes, data);
-    var newJpeg = new Buffer(newData, "binary");
-    fs.writeFileSync(filename2, newJpeg);
-
-
-
-    // var files = fs.readdirSync('/home/ardyi/Desktop/Dater/')
-    // files = natOrder.orderBy(files)
-
-    // return Promise.all(files.map(async(file) => {
-
-    // }))
+    })
   }
 }
 
