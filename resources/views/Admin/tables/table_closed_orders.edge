@@ -2,15 +2,18 @@
 <table class="table table-hover">
   <thead>
     <tr class="table-primary">
-      <th scope="col">Order Number</th>
-      <th scope="col">Due</th>
-      <th scope="col">Work Ordered</th>
-      <th scope="col">Address</th>
-      <th scope="col">City</th>
-      <th scope="col">State</th>
-      <th scope="col">Zip</th>
-      <th scope="col">Client Type</th>
+      <th scope="col" onclick="orderSort('orderNumber')">Order Number</th>
+      <th scope="col" onclick="orderSort('dueDate')">Due</th>
+      <th scope="col" onclick="orderSort('workOrdered')">Work Ordered</th>
+      <th scope="col" onclick="orderSort('address')">Address</th>
+      <th scope="col" onclick="orderSort('city')">City</th>
+      <th scope="col" onclick="orderSort('state')">State</th>
+      <th scope="col" onclick="orderSort('zipCode')">Zip</th>
+      <th scope="col" onclick="orderSort('clientType')">Client Type</th>
       <th scope="col">Option</th>
+      @if(result.data[0].orderStatus == 5)
+      <th scope="col">Date Closed</th>
+      @endif
     </tr>
   </thead>
   <tbody>
@@ -27,6 +30,9 @@
       <td>
         <button type="button" class="btn btn-outline-primary" onclick="showUpdateModal({{order.id}})">Update</button>
       </td>
+      @if(order.orderStatus == 5)
+      <td>{{order.updated_at}}</td>
+      @endif
     </tr>
     <input type="hidden" name="enc-id">
     @endeach

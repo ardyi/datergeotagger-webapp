@@ -26,6 +26,7 @@ Route.post('/admin/orders/uploadFile', 'Admin/OrderController.uploadFile')
 Route.post('/admin/orders/fetchAllOrders', 'Admin/OrderController.fetchAllOrders')
 Route.post('/admin/orders/fetchTodoOrders', 'Admin/OrderController.fetchTodoOrders')
 Route.post('/admin/orders/fetchClosedOrders', 'Admin/OrderController.fetchClosedOrders')
+Route.post('/admin/orders/fetchOrders', 'Admin/OrderController.fetchOrders')
 Route.post('/admin/orders/orderUpdate', 'Admin/OrderController.orderUpdate')
 
 //Images

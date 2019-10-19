@@ -19,7 +19,7 @@ class OrderController {
     view
   }) {
     const orderStatuses = await OrderStatus.query().fetch()
-    console.log(orderStatuses.toJSON())
+    // console.log(orderStatuses.toJSON())
     return view
       .render('Admin.orders', {
         orderStatuses: orderStatuses.toJSON()
@@ -119,10 +119,25 @@ class OrderController {
       })
   }
 
+  async fetchOrders({ request, view, response }){
+    const { page, search, sortColumn, orderBy, toFetch} = request.post()
+    let fetchBy
+    fetchBy = toFetch == 'All' ? 2 : toFetch == 'Todo' ? 3 : toFetch == 'Closed' ? 5 : 0
+    const toDoOrders = await Order
+      .query()
+      .where('orderStatus', fetchBy)
+      .SearchOrder(search)
+      .orderBy(sortColumn, orderBy)
+      .paginate(page, 10)
+    return view
+      .render('Admin.tables.table_closed_orders', {
+        result: toDoOrders.toJSON(),
+      })
+  }
+
   async orderUpdate({ request, view, response }){
     const id = await Order.updateOrder(request)
     return id ? await OrderNote.storeNote(request) : false
-    // return 
   }
 }
 

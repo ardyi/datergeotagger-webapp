@@ -1,6 +1,8 @@
 const URL = `${APP_URL}/admin/orders`
 var toFetch = 'All';
 var currentPage = 1;
+var toSort = 'id';
+var orderBy ='asc';
 
 $(() => {
   paginate(currentPage, $('#searchString').val());
@@ -67,11 +69,38 @@ function fetchOrders(page){
 
 function paginate(page, searchString){
   currentPage = page;
-  ajaxRequest(`${URL}/fetch${toFetch}Orders`, {
+  // ajaxRequest(`${URL}/fetch${toFetch}Orders`, {
+  ajaxRequest(`${URL}/fetchOrders`, {
     page: page,
     search: searchString,
+    sortColumn: toSort,
+    orderBy: orderBy,
+    toFetch: toFetch
   })
   .then(res => {
+    console.log(`#table-${toFetch.toLowerCase()}-orders`);
     $(`#table-${toFetch.toLowerCase()}-orders`).html(res);
   })
 }
+
+function orderSort(column){
+  if(toSort == column){
+    orderBy = orderBy == null ? 'asc' : orderBy == 'asc' ? 'desc' : 'asc';
+  } 
+  currentPage = 1;
+  // console.log(orderBy + ' ' + column);
+  toSort = column;
+  paginate(currentPage, $('#searchString').val())
+}
+
+// function orderSortBy(sortOrder){
+//   paginate(1, $('#searchString').val())
+
+//   if($('#orderSortBy').text() == 'Ascending'){
+//     orderBy = 'desc';
+//     $('#orderSortBy').text('Descending');
+//   } else {
+//     orderBy = 'asc';
+//     $('#orderSortBy').text('Ascending');
+//   }
+// }
