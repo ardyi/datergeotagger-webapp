@@ -9,7 +9,7 @@ const natOrder = require('natural-orderby')
 const piexif = require('piexifjs')
 
 const googleMapsClient = require('@google/maps').createClient({
-  key: 'AIzaSyC6NJ-uxbbg71jT7OAW17CLnv7K1yop3FE',
+  key: '',
   Promise: Promise
 });
 
